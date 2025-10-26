@@ -1,0 +1,27 @@
+{
+  "name": "projeto-portifolio-pessoal_01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielterciotti/Projeto-Portifolio-Pessoal_01.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielterciotti/Projeto-Portifolio-Pessoal_01/issues"
+  },
+  "homepage": "https://github.com/gabrielterciotti/Projeto-Portifolio-Pessoal_01#readme",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
