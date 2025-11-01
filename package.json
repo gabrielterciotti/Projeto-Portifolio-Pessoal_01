@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "mocha ./test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,11 +21,14 @@
   "homepage": "https://github.com/gabrielterciotti/Projeto-Portifolio-Pessoal_01#readme",
   "dependencies": {
     "body-parser": "^2.2.0",
-    "chai": "^6.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mocha": "^11.7.4",
-    "supertest": "^7.1.4",
     "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "chai": "^6.2.0",
+    "dotenv": "^17.2.3",
+    "mocha": "^11.7.4",
+    "supertest": "^7.1.4"
   }
 }
