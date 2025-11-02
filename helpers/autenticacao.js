@@ -1,11 +1,11 @@
 const request = require('supertest');
 const postLogin = require('../fixtures/postLogin.json')
 
-const obterToken = async (usuario, senha) => {
+const obterToken = async (usuario, password) => {
     const bodyLogin = { ...postLogin }  
 
     const respostaLogin = await request(process.env.BASE_URL) 
-                    .post('/login')
+                    .post('auth/login')
                     .set('Content-Type', 'application/json')
                     .send(bodyLogin)
                    
