@@ -9,7 +9,7 @@ const { obterToken } = require('../helpers/autenticacao');
 async function excluirTodosFeedings(token) {
   // Buscar todos os registros de alimentação
   const resposta = await request(process.env.BASE_URL)
-    .get('/feedings')
+    .get('feedings')
     .set('Authorization', `Bearer ${token}`);
 
   if (resposta.status !== 200 || !Array.isArray(resposta.body)) {
@@ -19,7 +19,7 @@ async function excluirTodosFeedings(token) {
   // Excluir cada registro de alimentação encontrado
   for (const feeding of resposta.body) {
     await request(process.env.BASE_URL)
-      .delete(`/feedings/${feeding.id}`)
+      .delete(`feedings/${feeding.id}`)
       .set('Authorization', `Bearer ${token}`);
   }
 }
