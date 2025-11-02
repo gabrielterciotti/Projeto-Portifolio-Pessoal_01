@@ -75,10 +75,37 @@ describe('Animals', () => {
 
         })
 
+        it('Usuário autenticado deve conseguir cadastrar um animal', async () => {
+
+            const bodyAnimals = { ...postAnimals }
+
+
+            const resposta = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+
+                
+            expect(resposta.status).to.equal(201);
+                        
+            //const id = resposta.body.id;
+
+            //await excluirAnimal(id);
+
+            await excluirTodosAnimais(token);
+
+
+            
+
+        })
+
     })
 
     describe('GET /animals', () => {
-        it('Apenas usuários autenticados podem visualizar a lista de animais', async () => {
+        it('Usuários não autenticados não podem visualizar a lista de animais', async () => {
 
             const bodyAnimals = { ...postAnimals }
             const animal_um = await request(process.env.BASE_URL)
@@ -117,6 +144,29 @@ describe('Animals', () => {
 
         })
 
+        it('Usuários autenticados podem visualizar a lista de animais', async () => {
+
+            const bodyAnimals = { ...postAnimals }
+            const animal_um = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+            
+            const resposta = await request(process.env.BASE_URL)
+                .get('animals')
+                .set('Authorization', `Bearer ${token}`)
+                
+
+            expect(resposta.status).to.equal(200);
+            //expect(resposta.body).to.be.an('array').that.is.not.empty;
+             
+            await excluirTodosAnimais(token);
+
+        })
+
     })
 
     describe('GET /animalsID', () => { 
@@ -133,7 +183,7 @@ describe('Animals', () => {
             await excluirTodosAnimais(token);
         })    
 
-        it('Apenas usuários autenticados podem realizar a consulta por um animal', async () => {
+        it('Usuários não autenticados não podem realizar a consulta por um animal', async () => {
 
             const bodyAnimals = { ...postAnimals }
             const animal_um = await request(process.env.BASE_URL)
@@ -156,11 +206,34 @@ describe('Animals', () => {
             await excluirTodosAnimais(token);
         })
 
+        it('Usuários autenticados podem realizar a consulta por um animal', async () => {
+
+            const bodyAnimals = { ...postAnimals }
+            const animal_um = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+
+            const animal_id = animal_um.body.id;
+
+            const resposta = await request(process.env.BASE_URL)
+                .get(`animals/${animal_id}`)
+                .set('Authorization', `Bearer ${token}`)
+                
+
+            expect(resposta.status).to.equal(200);
+
+            await excluirTodosAnimais(token);
+        })
+
 
     })
 
     describe('PUT /animalsID', () => {
-         it('Apenas usuários autenticados podem alterar os dados de um animal', async () => {
+         it('Usuários não autenticados não podem alterar os dados de um animal', async () => {
 
            
            const bodyAnimals = { ...postAnimals }
@@ -187,7 +260,36 @@ describe('Animals', () => {
             
 
             await excluirTodosAnimais(token);
-        })    
+        })
+
+         it('Usuários autenticados  podem alterar os dados de um animal', async () => {
+
+           
+           const bodyAnimals = { ...postAnimals }
+
+
+            const animal = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+
+
+            const retornoAnimal = animal.body;
+
+            const resposta = await request(process.env.BASE_URL)
+                .put(`animals/${retornoAnimal.id}`)
+                .set('Content-Type', 'application/json')
+                .set('Authorization', `Bearer ${token}`)
+                .send(retornoAnimal)
+
+            expect(resposta.status).to.equal(200);
+            
+
+            await excluirTodosAnimais(token);
+        })      
 
         it('Não deve permitir alterar o nome do animal para um nome já existente para o mesmo tutor', async () => {
 
@@ -236,12 +338,46 @@ describe('Animals', () => {
 
     describe('DELETE /animals{id}', () => { 
         it('Só poderá ser excluído um animal que exista no banco de dados', async () => {
-            
+            const bodyAnimals = { ...postAnimals }
+            const animal_um = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+
+            const id_animal = animal_um.body.id + 1;
+
             const animal = await request(process.env.BASE_URL)
-                .delete('animals/9999999999')
+                .delete(`animals/${id_animal}`)
                 .set('Authorization', `Bearer ${token}`)
 
             expect(animal.status).to.equal(404);
+
+            await excluirTodosAnimais(token);
+        })
+
+
+        it('Ao se infromar um ID de um animal válido, o sistema deverá permtir a exclusão do animal', async () => {
+            const bodyAnimals = { ...postAnimals }
+            const animal_um = await request(process.env.BASE_URL)
+                .post('animals')
+                //Passando os headers através do.s 
+                .set('Content-Type', 'application/json')
+                //Contatenando a variavel token com a palavra inicial Bearer devido ao token ser do tipo Bearer
+                .set('Authorization', `Bearer ${token}`)
+                .send(bodyAnimals)
+
+            const id_animal = animal_um.body.id;
+
+            const animal = await request(process.env.BASE_URL)
+                .delete(`animals/${id_animal}`)
+                .set('Authorization', `Bearer ${token}`)
+
+            expect(animal.status).to.equal(204);
+
+            await excluirTodosAnimais(token);
         })
                 
 
