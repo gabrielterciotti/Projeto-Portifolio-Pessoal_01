@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "mocha ./test/**/*.test.js"
+    "test": "mocha ./test/**/*.test.js --timeout 200000 --reporter mochawesome"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mochawesome": "^7.1.4",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {

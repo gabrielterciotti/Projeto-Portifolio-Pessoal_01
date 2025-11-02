@@ -9,7 +9,7 @@ const { excluirTodosAnimais } = require('../helpers/exclusaoTotal');
 const { excluirTodosFeedings } = require('../helpers/excluirFeedings');
 
 
-describe('Animals', () => {
+describe('Feedings', () => {
     let token
 
     beforeEach(async () => {
