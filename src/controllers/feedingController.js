@@ -18,6 +18,14 @@ exports.getFeedingsByAnimal = (req, res) => {
   res.json(feedings);
 };
 
+
 exports.getAllFeedings = (req, res) => {
   res.json(feedingModel.getAllFeedings());
+};
+
+exports.deleteFeeding = (req, res) => {
+  const id = parseInt(req.params.id);
+  const ok = feedingModel.deleteFeeding(id);
+  if (!ok) return res.status(404).json({ error: 'Alimentação não encontrada' });
+  res.status(204).send();
 };

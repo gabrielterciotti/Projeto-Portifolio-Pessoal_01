@@ -351,6 +351,34 @@
         }
       }
     },
+    "/feedings/{id}": {
+      "delete": {
+        "summary": "Excluir alimentação por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "204": { "description": "Alimentação excluída com sucesso" },
+          "404": {
+            "description": "Alimentação não encontrada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "Token não fornecido ou inválido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/feedings/{animalId}": {
       "get": {
         "summary": "Listar alimentações de um animal",
