@@ -1,10 +1,10 @@
 const request = require('supertest');
 const { expect } = require('chai');
 require('dotenv').config()
-const { obterToken } = require('../helpers/autenticacao')
-const postAnimals = require('../fixtures/postAnimals.json')
-const { excluirAnimal } = require('../helpers/exclusao');
-const { excluirTodosAnimais } = require('../helpers/exclusaoTotal');
+const { obterToken } = require('../../helpers/autenticacao')
+const postAnimals = require('../../fixtures/postAnimals.json')
+const { excluirAnimal } = require('../../helpers/exclusao');
+const { excluirTodosAnimais } = require('../../helpers/exclusaoTotal');
 
 describe('Animals', () => {
     let token
