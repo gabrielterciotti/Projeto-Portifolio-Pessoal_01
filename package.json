@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "mocha ./test/**/*.test.js --timeout 200000 --reporter mochawesome"
+    "test": "mocha ./test/api/**/*.test.js  --timeout 200000 --reporter mochawesome"
   },
   "repository": {
     "type": "git",
