@@ -12,9 +12,9 @@ jobs:
 
     # [variaveis] (vairaveis de ambiente, chaves de acesso a plataformas e etc.)
     env:
-      API_BASE_URL: 'http://localhost:3000/'
-	  PORT: 4000
-            
+      API_BASE_URL: 'http://localhost:3000'
+      PORT: 4000
+      
     # [acoes ou passos]
     steps: 
 
@@ -25,7 +25,9 @@ jobs:
         run: npm install
 
       - name: Iniciando o servidor
-        run: npm start
+        run: npm run server
 
-      - name: Executando testes automatizados
+      - name: Iniciando o teste automatizado
         run: npm test
+    
+    
