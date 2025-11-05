@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Iniciando o servidor
-        run: npm run server
+        run: npm start
 
       - name: Iniciando o teste automatizado
         run: npm test
