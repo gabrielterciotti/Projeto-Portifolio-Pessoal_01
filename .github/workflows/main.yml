@@ -1,53 +1,31 @@
 name: CI Mentoria
 
+# gatilhos
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
-    env:
-      CI: 'true'
-      API_BASE_URL: 'http://localhost:3000/'
 
-    steps:
-      - name: Checkout do repositório
+    # [config do so] (windows/linux/mac, chrome/firefox/edge,...)
+    runs-on: ubuntu-latest
+
+    # [variaveis] (vairaveis de ambiente, chaves de acesso a plataformas e etc.)
+    env:
+      API_BASE_URL: 'http://localhost:3000/'
+	  PORT: 4000
+            
+    # [acoes ou passos]
+    steps: 
+
+      - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Instalando as dependências
+        run: npm install
 
-      - name: Instalar dependências
-        run: npm ci
+      - name: Iniciando o servidor
+        run: npm start
 
-      - name: Iniciar servidor em background (grava logs)
-        run: |
-          nohup npm start > server.log 2>&1 & 
-          echo $! > /tmp/server.pid
-          sleep 1
-
-      - name: Esperar servidor subir (wait-on, timeout 240s)
-        run: npx wait-on http://localhost:3000 -t 240000
-
-      - name: Executar testes
+      - name: Executando testes automatizados
         run: npm test
-
-      - name: Mostrar logs do servidor se os testes falharem
-        if: failure()
-        run: |
-          echo "===== server.log ====="
-          sed -n '1,500p' server.log || true
-          echo "===== fim do server.log ====="
-
-      - name: Parar servidor (sempre)
-        if: always()
-        run: |
-          if [ -f /tmp/server.pid ]; then
-            kill $(cat /tmp/server.pid) || true
-          fi
