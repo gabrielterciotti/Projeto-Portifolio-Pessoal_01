@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: 'true'
-      API_BASE_URL: 'http://localhost:3000/'
+      API_BASE_URL: 'http://localhost:3000'
 
     steps:
       - name: Checkout do repositório
