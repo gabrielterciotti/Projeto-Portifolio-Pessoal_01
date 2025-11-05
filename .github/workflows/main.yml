@@ -12,7 +12,7 @@ jobs:
 
     # [variaveis] (vairaveis de ambiente, chaves de acesso a plataformas e etc.)
     env:
-      API_BASE_URL: 'http://localhost:3000'
+      API_BASE_URL: 'http://localhost:3000/'
             
     # [acoes ou passos]
     steps: 
