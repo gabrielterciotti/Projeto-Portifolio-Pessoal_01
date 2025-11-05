@@ -2,23 +2,52 @@ name: CI Mentoria
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+      API_BASE_URL: 'http://localhost:3000/'
 
     steps:
-      - name: Checkout do Repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Instalar dependências
         run: npm ci
 
-      # Recomendado: usa start-server-and-test para iniciar, aguardar e executar os testes
-      - name: Iniciar servidor e executar testes
-        run: npx start-server-and-test start http://localhost:3000 test
+      - name: Iniciar servidor em background (grava logs)
+        run: |
+          nohup npm start > server.log 2>&1 & 
+          echo $! > /tmp/server.pid
+          sleep 1
+
+      - name: Esperar servidor subir (wait-on, timeout 240s)
+        run: npx wait-on http://localhost:3000 -t 240000
+
+      - name: Executar testes
+        run: npm test
+
+      - name: Mostrar logs do servidor se os testes falharem
+        if: failure()
+        run: |
+          echo "===== server.log ====="
+          sed -n '1,500p' server.log || true
+          echo "===== fim do server.log ====="
+
+      - name: Parar servidor (sempre)
+        if: always()
+        run: |
+          if [ -f /tmp/server.pid ]; then
+            kill $(cat /tmp/server.pid) || true
+          fi
