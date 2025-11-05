@@ -1,0 +1,34 @@
+name: CI Mentoria
+
+# gatilhos
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+
+    # [config do so] (windows/linux/mac, chrome/firefox/edge,...)
+    runs-on: ubuntu-latest
+
+    # [variaveis] (vairaveis de ambiente, chaves de acesso a plataformas e etc.)
+    env:
+      API_BASE_URL: 'http://localhost:3000'
+            
+    # [acoes ou passos]
+    steps: 
+
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Instalando as dependências
+        run: npm install
+
+      - name: Iniciando o servidor
+        run: npm start
+
+      - name: Executando testes automatizados
+        run: npm test
+
+      
+    
+    
