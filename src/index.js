@@ -25,6 +25,8 @@ app.use('/feedings', feedingRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => res.status(200).send('OK'));
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
