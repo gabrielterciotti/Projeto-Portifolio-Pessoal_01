@@ -1,33 +1,27 @@
 name: CI Mentoria
 
-# gatilhos
 on:
   workflow_dispatch:
 
 jobs:
   tests:
-
-    # [config do so] (windows/linux/mac, chrome/firefox/edge,...)
     runs-on: ubuntu-latest
 
-    # [variaveis] (vairaveis de ambiente, chaves de acesso a plataformas e etc.)
     env:
-      API_BASE_URL: 'http://localhost:3000'
       PORT: 3000
-      
-    # [acoes ou passos]
-    steps: 
+      API_BASE_URL: 'http://localhost:3000'
 
+    steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      - name: Instalando as dependências
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
         run: npm install
 
-      - name: Iniciando o servidor
-        run: npm start
-
-      - name: Iniciando o teste automatizado
-        run: npm test
-    
-    
+      - name: Rodar servidor e testes
+        run: npx start-server-and-test 'npm start' http://localhost:3000 'npm test'
