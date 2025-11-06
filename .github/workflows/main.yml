@@ -23,11 +23,29 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Rodar servidor e testes
-        run: npx start-server-and-test 'npm start' http://localhost:3000/health 'npm test' --timeout 120000
+      # Inicia o servidor em background e salva logs
+      - name: Iniciar servidor em background
+        run: nohup npm start > server.log 2>&1 &
 
+      # Espera o servidor responder no /health
+      - name: Esperar servidor subir
+        run: npx wait-on http://localhost:3000/health --timeout 120000
+
+      # Executa os testes
+      - name: Rodar testes
+        run: npm test
+
+      # Mostra logs se falhar
       - name: Mostrar logs do servidor (em caso de erro)
         if: failure()
         run: |
           echo "=== Logs do servidor ==="
           cat server.log || echo "Nenhum log encontrado"
+
+      # Salva logs como artefato (para download)
+      - name: Upload de logs do servidor (sempre)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: server.log
