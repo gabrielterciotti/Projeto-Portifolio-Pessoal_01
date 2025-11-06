@@ -9,7 +9,7 @@ jobs:
 
     env:
       PORT: 3000
-      API_BASE_URL: 'http://127.0.0.1:3000' # força IPv4
+      API_BASE_URL: 'http://localhost:3000'
 
     steps:
       - name: Checkout do Repositório
@@ -23,26 +23,11 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Iniciar servidor em background (com logs)
-        run: |
-          echo "Iniciando servidor..."
-          nohup npm start > server.log 2>&1 &
-          echo "Esperando servidor responder..."
-          npx wait-on http://127.0.0.1:3000 --timeout 120000
-          echo "Servidor respondeu com sucesso!"
-
-      - name: Rodar testes
-        run: npm test
+      - name: Rodar servidor e testes
+        run: npx start-server-and-test 'npm start' http://localhost:3000/health 'npm test' --timeout 120000
 
       - name: Mostrar logs do servidor (em caso de erro)
         if: failure()
         run: |
           echo "=== Logs do servidor ==="
           cat server.log || echo "Nenhum log encontrado"
-
-      - name: Upload de logs do servidor (sempre)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: server-logs
-          path: server.log
